@@ -111,12 +111,16 @@ class _RenderSingleChildViewport extends RenderBox
 
   ViewportOffset get offset => _offset;
   ViewportOffset _offset;
+  bool setOffsetListener = false;
 
   set offset(ViewportOffset value) {
-    if (value == _offset) return;
+    if (value == _offset && setOffsetListener) return;
     if (attached) _offset.removeListener(_hasScrolled);
     _offset = value;
-    if (attached) _offset.addListener(_hasScrolled);
+    if (attached) {
+      setOffsetListener = true;
+      _offset.addListener(_hasScrolled);
+    }
     markNeedsLayout();
   }
 
